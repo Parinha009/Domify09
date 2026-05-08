@@ -42,18 +42,5 @@ export async function updateSession(request: NextRequest) {
     return NextResponse.redirect(new URL('/dashboard/normal', request.url))
   }
 
-  // Gate chef dashboard behind pro plan
-  if (path.startsWith('/dashboard/chef') && user) {
-    const { data: sub } = await supabase
-      .from('subscriptions')
-      .select('plan')
-      .eq('admin_id', user.id)
-      .single()
-
-    if (!sub || sub.plan !== 'pro') {
-      return NextResponse.redirect(new URL('/dashboard/normal', request.url))
-    }
-  }
-
   return supabaseResponse
 }
